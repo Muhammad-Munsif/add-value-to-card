@@ -94,8 +94,7 @@
                                 <p>If you don't have SSH keys or want to create a new one:</p>
                                 <div class="command">
                                     <code>ssh-keygen -t ed25519 -C "your_email@example.com"</code>
-                                    <button onclick="copyToClipboard('ssh-keygen -t ed25519 -C "your_email@example.com"')">Copy</button>
-                                </div>
+<button onclick="copyToClipboard('ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;')">Copy</button>                                </div>
                                 <p>Replace "your_email@example.com" with your actual email address.</p>
                                 <div class="warning-box">
                                     <p><strong>Note:</strong> When prompted, you can press Enter to accept the default file location. You can also set a passphrase for extra security.</p>
@@ -110,7 +109,7 @@
                                 <p>Start the SSH agent and add your key:</p>
                                 <div class="command">
                                     <code>eval "$(ssh-agent -s)"</code>
-                                    <button onclick="copyToClipboard('eval "$(ssh-agent -s)"')">Copy</button>
+                                    <button onclick="copyToClipboard('eval &quot;$(ssh-agent -s)&quot;')">Copy</button>
                                 </div>
                                 <div class="command">
                                     <code>ssh-add ~/.ssh/id_ed25519</code>
@@ -220,7 +219,7 @@
                                 <p>If you get an error that the ssh-agent isn't running:</p>
                                 <div class="command">
                                     <code>eval "$(ssh-agent -s)"</code>
-                                    <button onclick="copyToClipboard('eval "$(ssh-agent -s)"')">Copy</button>
+                                    
                                 </div>
                                 <p>Then add your key again:</p>
                                 <div class="command">
