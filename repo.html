@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Interactive Git SSH Troubleshooter</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="stylesheet" href="css/repo.css">
   </head>
   <body>
     <div class="container">
@@ -12,7 +13,6 @@
         <h1>Interactive Git SSH Troubleshooter</h1>
         <p class="subtitle">Click on any step to see detailed solutions</p>
       </header>
-
       <div class="card">
         <h2 class="card-title">
           <i class="fas fa-exclamation-triangle"></i> Error Analysis
@@ -43,21 +43,18 @@
           <div class="progress" id="progress"></div>
         </div>
       </div>
-
       <div class="card">
         <div class="tabs">
           <div class="tab active" data-tab="quick-fix">Quick Fix</div>
           <div class="tab" data-tab="detailed">SSH Setup Guide</div>
           <div class="tab" data-tab="troubleshoot">Troubleshooting</div>
         </div>
-
         <div class="tab-content active" id="quick-fix">
           <h3>Immediate Solution</h3>
           <p>
             Your remote URL is likely configured incorrectly. Here's how to fix
             it:
           </p>
-
           <div class="command">
             <code>git remote -v</code>
             <button onclick="copyToClipboard('git remote -v')">Copy</button>
@@ -80,7 +77,6 @@
               Copy
             </button>
           </div>
-
           <p>Then try pushing again:</p>
           <div class="command">
             <code>git push -u origin main</code>
@@ -88,16 +84,13 @@
               Copy
             </button>
           </div>
-
           <button class="button success" onclick="showTab('detailed')">
             <i class="fas fa-info-circle"></i> Need SSH Setup?
           </button>
         </div>
-
         <div class="tab-content" id="detailed">
           <h3>SSH Setup Guide</h3>
           <p>Click on any step below to see detailed instructions:</p>
-
           <ol class="steps" id="ssh-steps">
             <li data-step="1">
               <div class="step-content">
@@ -321,10 +314,8 @@
             </li>
           </ol>
         </div>
-
         <div class="tab-content" id="troubleshoot">
           <h3>Troubleshooting Common Issues</h3>
-
           <ol class="steps" id="troubleshoot-steps">
             <li data-step="1">
               <div class="step-content">
@@ -412,11 +403,9 @@
           </ol>
         </div>
       </div>
-
       <div class="grid">
         <div class="card">
           <h2 class="card-title"><i class="fas fa-search"></i> Diagnosis</h2>
-
           <div class="status">
             <div class="status-icon error"><i class="fas fa-times"></i></div>
             <div>
@@ -424,7 +413,6 @@
               <p>Protocol mismatch detected</p>
             </div>
           </div>
-
           <div class="status">
             <div class="status-icon warning">
               <i class="fas fa-exclamation"></i>
@@ -434,7 +422,6 @@
               <p>SSH might not be properly configured</p>
             </div>
           </div>
-
           <div class="status">
             <div class="status-icon"><i class="fas fa-question"></i></div>
             <div>
@@ -442,33 +429,26 @@
               <p>Not verified yet</p>
             </div>
           </div>
-
           <button class="button" id="diagnoseBtn">
             <i class="fas fa-play"></i> Run Full Diagnosis
           </button>
         </div>
-
         <div class="card">
           <h2 class="card-title">
             <i class="fas fa-lightbulb"></i> Quick Actions
           </h2>
-
           <button class="button success" onclick="showStepSolution(1)">
             <i class="fas fa-key"></i> Check SSH Keys
           </button>
-
           <button class="button success" onclick="showStepSolution(2)">
             <i class="fas fa-plus-circle"></i> Generate SSH Key
           </button>
-
           <button class="button warning" onclick="showStepSolution(7)">
             <i class="fas fa-sync-alt"></i> Update Remote URL
           </button>
-
           <button class="button" onclick="showStepSolution(6)">
             <i class="fas fa-network-wired"></i> Test SSH Connection
           </button>
-
           <div class="solution-box" style="margin-top: 15px">
             <p>
               <strong>Tip:</strong> Click any button above to jump to that
@@ -478,14 +458,12 @@
         </div>
       </div>
     </div>
-
     <footer>
       <p>
-        Interactive Git SSH Troubleshooter &copy; 2023 | Click on any step for
+        Interactive Git SSH Troubleshooter &copy; 2025 | Click on any step for
         detailed instructions
       </p>
     </footer>
-
     <script src="js/repo.js"></script>
   </body>
 </html>
