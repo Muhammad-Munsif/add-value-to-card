@@ -1,4 +1,3 @@
-<script>
     // Theme toggle functionality
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = themeToggle.querySelector('i');
@@ -213,4 +212,4 @@
         progressBar.style.transition = 'width 1s ease-in-out';
       }
     });
-  </script>
+  
