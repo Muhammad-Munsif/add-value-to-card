@@ -1,818 +1,786 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive Git SSH Troubleshooter</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="css/repo.css" />
-    <style>
-      * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
 
-body {
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-  color: #333;
-  min-height: 100vh;
-  padding: 20px;
-}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Git SSH Troubleshooter</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/repo.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
+    body {
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-header {
-  text-align: center;
-  padding: 30px 0;
-  color: white;
-}
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
+    header {
+      text-align: center;
+      padding: 30px 0;
+      color: white;
+    }
 
-.subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
 
-.card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  padding: 25px;
-  margin-bottom: 25px;
-}
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
 
-.card-title {
-  font-size: 1.5rem;
-  color: #2c3e50;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-}
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      margin-bottom: 25px;
+    }
 
-.card-title i {
-  margin-right: 10px;
-  color: #3498db;
-}
+    .card-title {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
 
-.error-box {
-  background: #f8d7da;
-  color: #721c24;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 20px 0;
-  font-family: "Courier New", monospace;
-  border-left: 4px solid #dc3545;
-}
+    .card-title i {
+      margin-right: 10px;
+      color: #3498db;
+    }
 
-.warning-box {
-  background: #fff3cd;
-  color: #856404;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 20px 0;
-  border-left: 4px solid #ffc107;
-}
+    .error-box {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      font-family: "Courier New", monospace;
+      border-left: 4px solid #dc3545;
+    }
 
-.solution-box {
-  background: #d4edda;
-  color: #155724;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 20px 0;
-  border-left: 4px solid #28a745;
-}
+    .warning-box {
+      background: #fff3cd;
+      color: #856404;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      border-left: 4px solid #ffc107;
+    }
 
-.command {
-  background: #2c3e50;
-  color: white;
-  padding: 10px 15px;
-  border-radius: 5px;
-  margin: 10px 0;
-  font-family: "Courier New", monospace;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    .solution-box {
+      background: #d4edda;
+      color: #155724;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 20px 0;
+      border-left: 4px solid #28a745;
+    }
 
-.command button {
-  background: #3498db;
-  border: none;
-  color: white;
-  padding: 5px 10px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
+    .command {
+      background: #2c3e50;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin: 10px 0;
+      font-family: "Courier New", monospace;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-.command button:hover {
-  background: #2980b9;
-}
+    .command button {
+      background: #3498db;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
 
-.steps {
-  list-style-type: none;
-  counter-reset: step-counter;
-}
+    .command button:hover {
+      background: #2980b9;
+    }
 
-.steps li {
-  margin-bottom: 15px;
-  padding: 15px;
-  position: relative;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: 1px solid #e0e0e0;
-}
+    .steps {
+      list-style-type: none;
+      counter-reset: step-counter;
+    }
 
-.steps li:hover {
-  background-color: #f8f9fa;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+    .steps li {
+      margin-bottom: 15px;
+      padding: 15px;
+      position: relative;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid #e0e0e0;
+    }
 
-.steps li.active {
-  background-color: #e3f2fd;
-  border-left: 4px solid #3498db;
-}
+    .steps li:hover {
+      background-color: #f8f9fa;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.steps li:before {
-  content: counter(step-counter);
-  counter-increment: step-counter;
-  background: #3498db;
-  color: white;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: 15px;
-  top: 15px;
-}
+    .steps li.active {
+      background-color: #e3f2fd;
+      border-left: 4px solid #3498db;
+    }
 
-.step-content {
-  margin-left: 50px;
-}
+    .steps li:before {
+      content: counter(step-counter);
+      counter-increment: step-counter;
+      background: #3498db;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 15px;
+      top: 15px;
+    }
 
-.step-details {
-  display: none;
-  margin-top: 15px;
-  padding: 15px;
-  background: #f8f9fa;
-  border-radius: 5px;
-  border-left: 3px solid #3498db;
-}
+    .step-content {
+      margin-left: 50px;
+    }
 
-.step-details.active {
-  display: block;
-  animation: fadeIn 0.5s ease;
-}
+    .step-details {
+      display: none;
+      margin-top: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 5px;
+      border-left: 3px solid #3498db;
+    }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+    .step-details.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  margin-top: 30px;
-}
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
 
-.status {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  background: white;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-}
+      to {
+        opacity: 1;
+      }
+    }
 
-.status-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #e0e0e0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
-  flex-shrink: 0;
-}
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
 
-.status-icon.success {
-  background: #d4edda;
-  color: #28a745;
-}
+    .status {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: white;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
 
-.status-icon.error {
-  background: #f8d7da;
-  color: #dc3545;
-}
+    .status-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
 
-.status-icon.warning {
-  background: #fff3cd;
-  color: #856404;
-}
+    .status-icon.success {
+      background: #d4edda;
+      color: #28a745;
+    }
 
-.progress-bar {
-  height: 10px;
-  background: #e0e0e0;
-  border-radius: 5px;
-  margin: 20px 0;
-  overflow: hidden;
-}
+    .status-icon.error {
+      background: #f8d7da;
+      color: #dc3545;
+    }
 
-.progress {
-  height: 100%;
-  background: #3498db;
-  width: 0%;
-  transition: width 1s ease-in-out;
-}
+    .status-icon.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
 
-.button {
-  background: #3498db;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  display: inline-flex;
-  align-items: center;
-  transition: background 0.3s;
-  margin-right: 10px;
-  margin-bottom: 10px;
-}
+    .progress-bar {
+      height: 10px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
 
-.button:hover {
-  background: #2980b9;
-}
+    .progress {
+      height: 100%;
+      background: #3498db;
+      width: 0%;
+      transition: width 1s ease-in-out;
+    }
 
-.button i {
-  margin-right: 8px;
-}
+    .button {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.3s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
 
-.button.danger {
-  background: #dc3545;
-}
+    .button:hover {
+      background: #2980b9;
+    }
 
-.button.danger:hover {
-  background: #c82333;
-}
+    .button i {
+      margin-right: 8px;
+    }
 
-.button.success {
-  background: #28a745;
-}
+    .button.danger {
+      background: #dc3545;
+    }
 
-.button.success:hover {
-  background: #218838;
-}
+    .button.danger:hover {
+      background: #c82333;
+    }
 
-.button.warning {
-  background: #ffc107;
-  color: #212529;
-}
+    .button.success {
+      background: #28a745;
+    }
 
-.button.warning:hover {
-  background: #e0a800;
-}
+    .button.success:hover {
+      background: #218838;
+    }
 
-.tabs {
-  display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
-}
+    .button.warning {
+      background: #ffc107;
+      color: #212529;
+    }
 
-.tab {
-  padding: 10px 20px;
-  cursor: pointer;
-  border-bottom: 3px solid transparent;
-}
+    .button.warning:hover {
+      background: #e0a800;
+    }
 
-.tab.active {
-  border-bottom: 3px solid #3498db;
-  color: #3498db;
-  font-weight: bold;
-}
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
 
-.tab-content {
-  display: none;
-}
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
 
-.tab-content.active {
-  display: block;
-}
+    .tab.active {
+      border-bottom: 3px solid #3498db;
+      color: #3498db;
+      font-weight: bold;
+    }
 
-footer {
-  text-align: center;
-  color: white;
-  padding: 20px;
-  margin-top: 40px;
-  opacity: 0.8;
-}
+    .tab-content {
+      display: none;
+    }
 
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+    .tab-content.active {
+      display: block;
+    }
 
-  h1 {
-    font-size: 2rem;
-  }
+    footer {
+      text-align: center;
+      color: white;
+      padding: 20px;
+      margin-top: 40px;
+      opacity: 0.8;
+    }
 
-  .tabs {
-    flex-direction: column;
-  }
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
 
-  .steps li:before {
-    position: static;
-    margin-right: 10px;
-  }
+      h1 {
+        font-size: 2rem;
+      }
 
-  .step-content {
-    margin-left: 0;
-  }
-}
+      .tabs {
+        flex-direction: column;
+      }
 
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1>Interactive Git SSH Troubleshooter</h1>
-        <p class="subtitle">Click on any step to see detailed solutions</p>
-      </header>
+      .steps li:before {
+        position: static;
+        margin-right: 10px;
+      }
+
+      .step-content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Interactive Git SSH Troubleshooter</h1>
+      <p class="subtitle">Click on any step to see detailed solutions</p>
+    </header>
+    <div class="card">
+      <h2 class="card-title">
+        <i class="fas fa-exclamation-triangle"></i> Error Analysis
+      </h2>
+      <div class="error-box">
+        <p>
+          ssh: Could not resolve hostname https: Name or service not known
+        </p>
+        <p>fatal: Could not read from remote repository.</p>
+        <p>
+          Please make sure you have the correct access rights and the
+          repository exists.
+        </p>
+      </div>
+
+      <div class="warning-box">
+        <p>
+          <strong>Problem Identified:</strong> Git is trying to use SSH
+          protocol with an HTTPS URL
+        </p>
+        <p>
+          This happens when your remote URL is configured incorrectly or
+          there's a protocol mismatch.
+        </p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="tabs">
+        <div class="tab active" data-tab="quick-fix">Quick Fix</div>
+        <div class="tab" data-tab="detailed">SSH Setup Guide</div>
+        <div class="tab" data-tab="troubleshoot">Troubleshooting</div>
+      </div>
+      <div class="tab-content active" id="quick-fix">
+        <h3>Immediate Solution</h3>
+        <p>
+          Your remote URL is likely configured incorrectly. Here's how to fix
+          it:
+        </p>
+        <div class="command">
+          <code>git remote -v</code>
+          <button onclick="copyToClipboard('git remote -v')">Copy</button>
+        </div>
+
+        <p>
+          Check if your remote URL starts with
+          <code>git@github.com:</code> (SSH) or
+          <code>https://github.com/</code> (HTTPS).
+        </p>
+
+        <div class="command">
+          <code>git remote set-url origin
+              https://github.com/Muhammad-Munsif/05project-JS.git</code>
+          <button
+            onclick="copyToClipboard('git remote set-url origin https://github.com/Muhammad-Munsif/05project-JS.git')">
+            Copy
+          </button>
+        </div>
+        <p>Then try pushing again:</p>
+        <div class="command">
+          <code>git push -u origin main</code>
+          <button onclick="copyToClipboard('git push -u origin main')">
+            Copy
+          </button>
+        </div>
+        <button class="button success" onclick="showTab('detailed')">
+          <i class="fas fa-info-circle"></i> Need SSH Setup?
+        </button>
+      </div>
+      <div class="tab-content" id="detailed">
+        <h3>SSH Setup Guide</h3>
+        <p>Click on any step below to see detailed instructions:</p>
+        <ol class="steps" id="ssh-steps">
+          <li data-step="1">
+            <div class="step-content">
+              <strong>Check for existing SSH keys</strong>
+              <div class="step-details" id="step-1-details">
+                <p>First, check if you already have SSH keys:</p>
+                <div class="command">
+                  <code>ls -al ~/.ssh</code>
+                  <button onclick="copyToClipboard('ls -al ~/.ssh')">
+                    Copy
+                  </button>
+                </div>
+                <p>
+                  Look for files named <code>id_rsa</code>,
+                  <code>id_ed25519</code>, or similar. If you see these, you
+                  already have SSH keys.
+                </p>
+                <div class="solution-box">
+                  <p>
+                    <strong>Tip:</strong> If you already have keys, you can
+                    skip to step 3.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="2">
+            <div class="step-content">
+              <strong>Generate a new SSH key</strong>
+              <div class="step-details" id="step-2-details">
+                <p>If you don't have SSH keys or want to create a new one:</p>
+                <div class="command">
+                  <code>ssh-keygen -t ed25519 -C "your_email@example.com"</code>
+                  <button onclick="copyToClipboard('ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;')">
+                    Copy
+                  </button>
+                </div>
+                <p>
+                  Replace "your_email@example.com" with your actual email
+                  address.
+                </p>
+                <div class="warning-box">
+                  <p>
+                    <strong>Note:</strong> When prompted, you can press Enter
+                    to accept the default file location. You can also set a
+                    passphrase for extra security.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="3">
+            <div class="step-content">
+              <strong>Add your SSH key to the ssh-agent</strong>
+              <div class="step-details" id="step-3-details">
+                <p>Start the SSH agent and add your key:</p>
+                <div class="command">
+                  <code>eval "$(ssh-agent -s)"</code>
+                  <button onclick="copyToClipboard('eval &quot;$(ssh-agent -s)&quot;')">
+                    Copy
+                  </button>
+                </div>
+                <div class="command">
+                  <code>ssh-add ~/.ssh/id_ed25519</code>
+                  <button onclick="copyToClipboard('ssh-add ~/.ssh/id_ed25519')">
+                    Copy
+                  </button>
+                </div>
+                <p>
+                  If you used a different key name, replace
+                  <code>id_ed25519</code> with your key name.
+                </p>
+                <div class="solution-box">
+                  <p>
+                    <strong>Tip:</strong> The ssh-agent manages your SSH keys
+                    and remembers your passphrase so you don't have to enter
+                    it every time.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="4">
+            <div class="step-content">
+              <strong>Copy the SSH public key</strong>
+              <div class="step-details" id="step-4-details">
+                <p>Display your public key to copy it:</p>
+                <div class="command">
+                  <code>cat ~/.ssh/id_ed25519.pub</code>
+                  <button onclick="copyToClipboard('cat ~/.ssh/id_ed25519.pub')">
+                    Copy
+                  </button>
+                </div>
+                <p>
+                  Select and copy the entire output, which should look like:
+                </p>
+                <div class="command">
+                  <code>ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
+                      your_email@example.com</code>
+                </div>
+                <div class="warning-box">
+                  <p>
+                    <strong>Important:</strong> Copy the entire key, starting
+                    with "ssh-ed25519" (or "ssh-rsa" for RSA keys) and ending
+                    with your email.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="5">
+            <div class="step-content">
+              <strong>Add the SSH key to your GitHub account</strong>
+              <div class="step-details" id="step-5-details">
+                <p>Now add the key to your GitHub account:</p>
+                <ol>
+                  <li>Go to GitHub.com and log in to your account</li>
+                  <li>Click your profile photo → Settings</li>
+                  <li>
+                    In the user settings sidebar, click
+                    <strong>SSH and GPG keys</strong>
+                  </li>
+                  <li>
+                    Click <strong>New SSH key</strong> or
+                    <strong>Add SSH key</strong>
+                  </li>
+                  <li>Paste your key into the "Key" field</li>
+                  <li>Add a descriptive title (like "My Laptop")</li>
+                  <li>Click <strong>Add SSH key</strong></li>
+                </ol>
+                <div class="solution-box">
+                  <p>
+                    <strong>Tip:</strong> If prompted, confirm your GitHub
+                    password to complete the process.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="6">
+            <div class="step-content">
+              <strong>Test the SSH connection</strong>
+              <div class="step-details" id="step-6-details">
+                <p>Verify that everything is working:</p>
+                <div class="command">
+                  <code>ssh -T git@github.com</code>
+                  <button onclick="copyToClipboard('ssh -T git@github.com')">
+                    Copy
+                  </button>
+                </div>
+                <p>You should see a message like:</p>
+                <div class="command">
+                  <code>Hi username! You've successfully authenticated, but
+                      GitHub does not provide shell access.</code>
+                </div>
+                <div class="warning-box">
+                  <p>
+                    <strong>Note:</strong> If you see a "permission denied"
+                    message, double-check that you've added the correct key to
+                    GitHub.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="7">
+            <div class="step-content">
+              <strong>Update your remote URL to use SSH</strong>
+              <div class="step-details" id="step-7-details">
+                <p>Now change your remote URL to use SSH:</p>
+                <div class="command">
+                  <code>git remote set-url origin
+                      git@github.com:Muhammad-Munsif/05project-JS.git</code>
+                  <button
+                    onclick="copyToClipboard('git remote set-url origin git@github.com:Muhammad-Munsif/05project-JS.git')">
+                    Copy
+                  </button>
+                </div>
+                <p>Verify the change:</p>
+                <div class="command">
+                  <code>git remote -v</code>
+                  <button onclick="copyToClipboard('git remote -v')">
+                    Copy
+                  </button>
+                </div>
+                <p>Now try pushing again:</p>
+                <div class="command">
+                  <code>git push -u origin main</code>
+                  <button onclick="copyToClipboard('git push -u origin main')">
+                    Copy
+                  </button>
+                </div>
+                <div class="solution-box">
+                  <p>
+                    <strong>Success!</strong> Your SSH setup is complete and
+                    you should be able to push without entering your
+                    credentials each time.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <div class="tab-content" id="troubleshoot">
+        <h3>Troubleshooting Common Issues</h3>
+        <ol class="steps" id="troubleshoot-steps">
+          <li data-step="1">
+            <div class="step-content">
+              <strong>SSH Agent Not Running</strong>
+              <div class="step-details" id="troubleshoot-1-details">
+                <p>If you get an error that the ssh-agent isn't running:</p>
+                <div class="command">
+                  <code>eval "$(ssh-agent -s)"</code>
+                </div>
+                <p>Then add your key again:</p>
+                <div class="command">
+                  <code>ssh-add ~/.ssh/id_ed25519</code>
+                  <button onclick="copyToClipboard('ssh-add ~/.ssh/id_ed25519')">
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="2">
+            <div class="step-content">
+              <strong>Permission Denied (publickey)</strong>
+              <div class="step-details" id="troubleshoot-2-details">
+                <p>If you see "Permission denied (publickey)":</p>
+                <ol>
+                  <li>
+                    Verify you've added the correct public key to GitHub
+                  </li>
+                  <li>
+                    Check that your private key is loaded in the ssh-agent
+                  </li>
+                  <li>Test with verbose output:</li>
+                </ol>
+                <div class="command">
+                  <code>ssh -Tv git@github.com</code>
+                  <button onclick="copyToClipboard('ssh -Tv git@github.com')">
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li data-step="3">
+            <div class="step-content">
+              <strong>Remote Origin Already Exists</strong>
+              <div class="step-details" id="troubleshoot-3-details">
+                <p>If you get "error: remote origin already exists":</p>
+                <p>Update the existing remote instead of adding a new one:</p>
+                <div class="command">
+                  <code>git remote set-url origin
+                      git@github.com:Muhammad-Munsif/05project-JS.git</code>
+                  <button
+                    onclick="copyToClipboard('git remote set-url origin git@github.com:Muhammad-Munsif/05project-JS.git')">
+                    Copy
+                  </button>
+                </div>
+                <p>Or remove it first if needed:</p>
+                <div class="command">
+                  <code>git remote remove origin</code>
+                  <button onclick="copyToClipboard('git remote remove origin')">
+                    Copy
+                  </button>
+                </div>
+                <div class="command">
+                  <code>git remote add origin
+                      git@github.com:Muhammad-Munsif/05project-JS.git</code>
+                  <button
+                    onclick="copyToClipboard('git remote add origin git@github.com:Muhammad-Munsif/05project-JS.git')">
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h2 class="card-title"><i class="fas fa-search"></i> Diagnosis</h2>
+        <div class="status">
+          <div class="status-icon error"><i class="fas fa-times"></i></div>
+          <div>
+            <p><strong>Remote URL Configuration</strong></p>
+            <p>Protocol mismatch detected</p>
+          </div>
+        </div>
+        <div class="status">
+          <div class="status-icon warning">
+            <i class="fas fa-exclamation"></i>
+          </div>
+          <div>
+            <p><strong>SSH Setup</strong></p>
+            <p>SSH might not be properly configured</p>
+          </div>
+        </div>
+        <div class="status">
+          <div class="status-icon"><i class="fas fa-question"></i></div>
+          <div>
+            <p><strong>Repository Access</strong></p>
+            <p>Not verified yet</p>
+          </div>
+        </div>
+        <button class="button" id="diagnoseBtn">
+          <i class="fas fa-play"></i> Run Full Diagnosis
+        </button>
+      </div>
       <div class="card">
         <h2 class="card-title">
-          <i class="fas fa-exclamation-triangle"></i> Error Analysis
+          <i class="fas fa-lightbulb"></i> Quick Actions
         </h2>
-        <div class="error-box">
+        <button class="button success" onclick="showStepSolution(1)">
+          <i class="fas fa-key"></i> Check SSH Keys
+        </button>
+        <button class="button success" onclick="showStepSolution(2)">
+          <i class="fas fa-plus-circle"></i> Generate SSH Key
+        </button>
+        <button class="button warning" onclick="showStepSolution(7)">
+          <i class="fas fa-sync-alt"></i> Update Remote URL
+        </button>
+        <button class="button" onclick="showStepSolution(6)">
+          <i class="fas fa-network-wired"></i> Test SSH Connection
+        </button>
+        <div class="solution-box" style="margin-top: 15px">
           <p>
-            ssh: Could not resolve hostname https: Name or service not known
+            <strong>Tip:</strong> Click any button above to jump to that
+            specific solution.
           </p>
-          <p>fatal: Could not read from remote repository.</p>
-          <p>
-            Please make sure you have the correct access rights and the
-            repository exists.
-          </p>
-        </div>
-
-        <div class="warning-box">
-          <p>
-            <strong>Problem Identified:</strong> Git is trying to use SSH
-            protocol with an HTTPS URL
-          </p>
-          <p>
-            This happens when your remote URL is configured incorrectly or
-            there's a protocol mismatch.
-          </p>
-        </div>
-
-        <div class="progress-bar">
-          <div class="progress" id="progress"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="tabs">
-          <div class="tab active" data-tab="quick-fix">Quick Fix</div>
-          <div class="tab" data-tab="detailed">SSH Setup Guide</div>
-          <div class="tab" data-tab="troubleshoot">Troubleshooting</div>
-        </div>
-        <div class="tab-content active" id="quick-fix">
-          <h3>Immediate Solution</h3>
-          <p>
-            Your remote URL is likely configured incorrectly. Here's how to fix
-            it:
-          </p>
-          <div class="command">
-            <code>git remote -v</code>
-            <button onclick="copyToClipboard('git remote -v')">Copy</button>
-          </div>
-
-          <p>
-            Check if your remote URL starts with
-            <code>git@github.com:</code> (SSH) or
-            <code>https://github.com/</code> (HTTPS).
-          </p>
-
-          <div class="command">
-            <code
-              >git remote set-url origin
-              https://github.com/Muhammad-Munsif/05project-JS.git</code
-            >
-            <button
-              onclick="copyToClipboard('git remote set-url origin https://github.com/Muhammad-Munsif/05project-JS.git')"
-            >
-              Copy
-            </button>
-          </div>
-          <p>Then try pushing again:</p>
-          <div class="command">
-            <code>git push -u origin main</code>
-            <button onclick="copyToClipboard('git push -u origin main')">
-              Copy
-            </button>
-          </div>
-          <button class="button success" onclick="showTab('detailed')">
-            <i class="fas fa-info-circle"></i> Need SSH Setup?
-          </button>
-        </div>
-        <div class="tab-content" id="detailed">
-          <h3>SSH Setup Guide</h3>
-          <p>Click on any step below to see detailed instructions:</p>
-          <ol class="steps" id="ssh-steps">
-            <li data-step="1">
-              <div class="step-content">
-                <strong>Check for existing SSH keys</strong>
-                <div class="step-details" id="step-1-details">
-                  <p>First, check if you already have SSH keys:</p>
-                  <div class="command">
-                    <code>ls -al ~/.ssh</code>
-                    <button onclick="copyToClipboard('ls -al ~/.ssh')">
-                      Copy
-                    </button>
-                  </div>
-                  <p>
-                    Look for files named <code>id_rsa</code>,
-                    <code>id_ed25519</code>, or similar. If you see these, you
-                    already have SSH keys.
-                  </p>
-                  <div class="solution-box">
-                    <p>
-                      <strong>Tip:</strong> If you already have keys, you can
-                      skip to step 3.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="2">
-              <div class="step-content">
-                <strong>Generate a new SSH key</strong>
-                <div class="step-details" id="step-2-details">
-                  <p>If you don't have SSH keys or want to create a new one:</p>
-                  <div class="command">
-                    <code
-                      >ssh-keygen -t ed25519 -C "your_email@example.com"</code
-                    >
-                    <button
-                      onclick="copyToClipboard('ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p>
-                    Replace "your_email@example.com" with your actual email
-                    address.
-                  </p>
-                  <div class="warning-box">
-                    <p>
-                      <strong>Note:</strong> When prompted, you can press Enter
-                      to accept the default file location. You can also set a
-                      passphrase for extra security.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="3">
-              <div class="step-content">
-                <strong>Add your SSH key to the ssh-agent</strong>
-                <div class="step-details" id="step-3-details">
-                  <p>Start the SSH agent and add your key:</p>
-                  <div class="command">
-                    <code>eval "$(ssh-agent -s)"</code>
-                    <button
-                      onclick="copyToClipboard('eval &quot;$(ssh-agent -s)&quot;')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <div class="command">
-                    <code>ssh-add ~/.ssh/id_ed25519</code>
-                    <button
-                      onclick="copyToClipboard('ssh-add ~/.ssh/id_ed25519')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p>
-                    If you used a different key name, replace
-                    <code>id_ed25519</code> with your key name.
-                  </p>
-                  <div class="solution-box">
-                    <p>
-                      <strong>Tip:</strong> The ssh-agent manages your SSH keys
-                      and remembers your passphrase so you don't have to enter
-                      it every time.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="4">
-              <div class="step-content">
-                <strong>Copy the SSH public key</strong>
-                <div class="step-details" id="step-4-details">
-                  <p>Display your public key to copy it:</p>
-                  <div class="command">
-                    <code>cat ~/.ssh/id_ed25519.pub</code>
-                    <button
-                      onclick="copyToClipboard('cat ~/.ssh/id_ed25519.pub')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p>
-                    Select and copy the entire output, which should look like:
-                  </p>
-                  <div class="command">
-                    <code
-                      >ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI...
-                      your_email@example.com</code
-                    >
-                  </div>
-                  <div class="warning-box">
-                    <p>
-                      <strong>Important:</strong> Copy the entire key, starting
-                      with "ssh-ed25519" (or "ssh-rsa" for RSA keys) and ending
-                      with your email.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="5">
-              <div class="step-content">
-                <strong>Add the SSH key to your GitHub account</strong>
-                <div class="step-details" id="step-5-details">
-                  <p>Now add the key to your GitHub account:</p>
-                  <ol>
-                    <li>Go to GitHub.com and log in to your account</li>
-                    <li>Click your profile photo → Settings</li>
-                    <li>
-                      In the user settings sidebar, click
-                      <strong>SSH and GPG keys</strong>
-                    </li>
-                    <li>
-                      Click <strong>New SSH key</strong> or
-                      <strong>Add SSH key</strong>
-                    </li>
-                    <li>Paste your key into the "Key" field</li>
-                    <li>Add a descriptive title (like "My Laptop")</li>
-                    <li>Click <strong>Add SSH key</strong></li>
-                  </ol>
-                  <div class="solution-box">
-                    <p>
-                      <strong>Tip:</strong> If prompted, confirm your GitHub
-                      password to complete the process.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="6">
-              <div class="step-content">
-                <strong>Test the SSH connection</strong>
-                <div class="step-details" id="step-6-details">
-                  <p>Verify that everything is working:</p>
-                  <div class="command">
-                    <code>ssh -T git@github.com</code>
-                    <button onclick="copyToClipboard('ssh -T git@github.com')">
-                      Copy
-                    </button>
-                  </div>
-                  <p>You should see a message like:</p>
-                  <div class="command">
-                    <code
-                      >Hi username! You've successfully authenticated, but
-                      GitHub does not provide shell access.</code
-                    >
-                  </div>
-                  <div class="warning-box">
-                    <p>
-                      <strong>Note:</strong> If you see a "permission denied"
-                      message, double-check that you've added the correct key to
-                      GitHub.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="7">
-              <div class="step-content">
-                <strong>Update your remote URL to use SSH</strong>
-                <div class="step-details" id="step-7-details">
-                  <p>Now change your remote URL to use SSH:</p>
-                  <div class="command">
-                    <code
-                      >git remote set-url origin
-                      git@github.com:Muhammad-Munsif/05project-JS.git</code
-                    >
-                    <button
-                      onclick="copyToClipboard('git remote set-url origin git@github.com:Muhammad-Munsif/05project-JS.git')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p>Verify the change:</p>
-                  <div class="command">
-                    <code>git remote -v</code>
-                    <button onclick="copyToClipboard('git remote -v')">
-                      Copy
-                    </button>
-                  </div>
-                  <p>Now try pushing again:</p>
-                  <div class="command">
-                    <code>git push -u origin main</code>
-                    <button
-                      onclick="copyToClipboard('git push -u origin main')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <div class="solution-box">
-                    <p>
-                      <strong>Success!</strong> Your SSH setup is complete and
-                      you should be able to push without entering your
-                      credentials each time.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ol>
-        </div>
-        <div class="tab-content" id="troubleshoot">
-          <h3>Troubleshooting Common Issues</h3>
-          <ol class="steps" id="troubleshoot-steps">
-            <li data-step="1">
-              <div class="step-content">
-                <strong>SSH Agent Not Running</strong>
-                <div class="step-details" id="troubleshoot-1-details">
-                  <p>If you get an error that the ssh-agent isn't running:</p>
-                  <div class="command">
-                    <code>eval "$(ssh-agent -s)"</code>
-                  </div>
-                  <p>Then add your key again:</p>
-                  <div class="command">
-                    <code>ssh-add ~/.ssh/id_ed25519</code>
-                    <button
-                      onclick="copyToClipboard('ssh-add ~/.ssh/id_ed25519')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="2">
-              <div class="step-content">
-                <strong>Permission Denied (publickey)</strong>
-                <div class="step-details" id="troubleshoot-2-details">
-                  <p>If you see "Permission denied (publickey)":</p>
-                  <ol>
-                    <li>
-                      Verify you've added the correct public key to GitHub
-                    </li>
-                    <li>
-                      Check that your private key is loaded in the ssh-agent
-                    </li>
-                    <li>Test with verbose output:</li>
-                  </ol>
-                  <div class="command">
-                    <code>ssh -Tv git@github.com</code>
-                    <button onclick="copyToClipboard('ssh -Tv git@github.com')">
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li data-step="3">
-              <div class="step-content">
-                <strong>Remote Origin Already Exists</strong>
-                <div class="step-details" id="troubleshoot-3-details">
-                  <p>If you get "error: remote origin already exists":</p>
-                  <p>Update the existing remote instead of adding a new one:</p>
-                  <div class="command">
-                    <code
-                      >git remote set-url origin
-                      git@github.com:Muhammad-Munsif/05project-JS.git</code
-                    >
-                    <button
-                      onclick="copyToClipboard('git remote set-url origin git@github.com:Muhammad-Munsif/05project-JS.git')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <p>Or remove it first if needed:</p>
-                  <div class="command">
-                    <code>git remote remove origin</code>
-                    <button
-                      onclick="copyToClipboard('git remote remove origin')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <div class="command">
-                    <code
-                      >git remote add origin
-                      git@github.com:Muhammad-Munsif/05project-JS.git</code
-                    >
-                    <button
-                      onclick="copyToClipboard('git remote add origin git@github.com:Muhammad-Munsif/05project-JS.git')"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ol>
-        </div>
-      </div>
-      <div class="grid">
-        <div class="card">
-          <h2 class="card-title"><i class="fas fa-search"></i> Diagnosis</h2>
-          <div class="status">
-            <div class="status-icon error"><i class="fas fa-times"></i></div>
-            <div>
-              <p><strong>Remote URL Configuration</strong></p>
-              <p>Protocol mismatch detected</p>
-            </div>
-          </div>
-          <div class="status">
-            <div class="status-icon warning">
-              <i class="fas fa-exclamation"></i>
-            </div>
-            <div>
-              <p><strong>SSH Setup</strong></p>
-              <p>SSH might not be properly configured</p>
-            </div>
-          </div>
-          <div class="status">
-            <div class="status-icon"><i class="fas fa-question"></i></div>
-            <div>
-              <p><strong>Repository Access</strong></p>
-              <p>Not verified yet</p>
-            </div>
-          </div>
-          <button class="button" id="diagnoseBtn">
-            <i class="fas fa-play"></i> Run Full Diagnosis
-          </button>
-        </div>
-        <div class="card">
-          <h2 class="card-title">
-            <i class="fas fa-lightbulb"></i> Quick Actions
-          </h2>
-          <button class="button success" onclick="showStepSolution(1)">
-            <i class="fas fa-key"></i> Check SSH Keys
-          </button>
-          <button class="button success" onclick="showStepSolution(2)">
-            <i class="fas fa-plus-circle"></i> Generate SSH Key
-          </button>
-          <button class="button warning" onclick="showStepSolution(7)">
-            <i class="fas fa-sync-alt"></i> Update Remote URL
-          </button>
-          <button class="button" onclick="showStepSolution(6)">
-            <i class="fas fa-network-wired"></i> Test SSH Connection
-          </button>
-          <div class="solution-box" style="margin-top: 15px">
-            <p>
-              <strong>Tip:</strong> Click any button above to jump to that
-              specific solution.
-            </p>
-          </div>
         </div>
       </div>
     </div>
-    <footer>
-      <p>
-        Interactive Git SSH Troubleshooter &copy; 2025 | Click on any step for
-        detailed instructions
-      </p>
-    </footer>
-    <script src="js/repo.js"></script>
-  </body>
+  </div>
+  <footer>
+    <p>
+      Interactive Git SSH Troubleshooter &copy; 2025 | Click on any step for
+      detailed instructions
+    </p>
+  </footer>
+  <script src="js/repo.js"></script>
+</body>
+
 </html>
